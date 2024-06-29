@@ -1,0 +1,224 @@
+[
+    "function fibonacci(n) {\n  if (n <= 1) return n;\n  let a = 0, b = 1;\n  for (let i = 2; i <= n; i++) {\n    let temp = b;\n    b = a + b;\n    a = temp;\n  }\n  return b;\n}",
+  
+    "const debounce = (func, delay) => {\n  let timeoutId;\n  return (...args) => {\n    clearTimeout(timeoutId);\n    timeoutId = setTimeout(() => {\n      func.apply(this, args);\n    }, delay);\n  };\n};",
+  
+    "class Stack {\n  constructor() {\n    this.items = [];\n  }\n  push(element) {\n    this.items.push(element);\n  }\n  pop() {\n    if (this.isEmpty()) return 'Stack is empty';\n    return this.items.pop();\n  }\n  isEmpty() {\n    return this.items.length === 0;\n  }\n}",
+  
+    "function quickSort(arr) {\n  if (arr.length <= 1) return arr;\n  const pivot = arr[Math.floor(arr.length / 2)];\n  const left = arr.filter(x => x < pivot);\n  const middle = arr.filter(x => x === pivot);\n  const right = arr.filter(x => x > pivot);\n  return [...quickSort(left), ...middle, ...quickSort(right)];\n}",
+  
+    "const memoize = (fn) => {\n  const cache = {};\n  return (...args) => {\n    const key = JSON.stringify(args);\n    if (key in cache) {\n      return cache[key];\n    }\n    const result = fn.apply(this, args);\n    cache[key] = result;\n    return result;\n  };\n};",
+  
+    "function binarySearch(arr, target) {\n  let left = 0;\n  let right = arr.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (arr[mid] === target) return mid;\n    if (arr[mid] < target) left = mid + 1;\n    else right = mid - 1;\n  }\n  return -1;\n}",
+  
+    "const throttle = (func, limit) => {\n  let inThrottle;\n  return function(...args) {\n    if (!inThrottle) {\n      func.apply(this, args);\n      inThrottle = true;\n      setTimeout(() => inThrottle = false, limit);\n    }\n  };\n};",
+  
+    "function deepClone(obj) {\n  if (obj === null || typeof obj !== 'object') {\n    return obj;\n  }\n  let clone = Array.isArray(obj) ? [] : {};\n  for (let key in obj) {\n    if (Object.prototype.hasOwnProperty.call(obj, key)) {\n      clone[key] = deepClone(obj[key]);\n    }\n  }\n  return clone;\n}",
+  
+    "class Queue {\n  constructor() {\n    this.items = {};\n    this.frontIndex = 0;\n    this.backIndex = 0;\n  }\n  enqueue(item) {\n    this.items[this.backIndex] = item;\n    this.backIndex++;\n    return item + ' inserted';\n  }\n  dequeue() {\n    const item = this.items[this.frontIndex];\n    delete this.items[this.frontIndex];\n    this.frontIndex++;\n    return item;\n  }\n  peek() {\n    return this.items[this.frontIndex];\n  }\n  get printQueue() {\n    return Object.values(this.items);\n  }\n}",
+  
+    "function mergeSort(arr) {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  const left = arr.slice(0, mid);\n  const right = arr.slice(mid);\n  return merge(mergeSort(left), mergeSort(right));\n}\n\nfunction merge(left, right) {\n  let result = [];\n  let leftIndex = 0;\n  let rightIndex = 0;\n  while (leftIndex < left.length && rightIndex < right.length) {\n    if (left[leftIndex] < right[rightIndex]) {\n      result.push(left[leftIndex]);\n      leftIndex++;\n    } else {\n      result.push(right[rightIndex]);\n      rightIndex++;\n    }\n  }\n  return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));\n}",
+  
+    "const curry = (fn) => {\n  return function curried(...args) {\n    if (args.length >= fn.length) {\n      return fn.apply(this, args);\n    } else {\n      return function(...args2) {\n        return curried.apply(this, args.concat(args2));\n      };\n    }\n  };\n};",
+  
+    "function* fibonacci() {\n  let [prev, curr] = [0, 1];\n  while (true) {\n    yield curr;\n    [prev, curr] = [curr, prev + curr];\n  }\n}\n\nconst fib = fibonacci();\nfor (let i = 0; i < 10; i++) {\n  console.log(fib.next().value);\n}",
+  
+    "const compose = (...fns) => {\n  return (arg) => {\n    return fns.reduceRight((composed, f) => f(composed), arg);\n  };\n};\n\nconst double = x => x * 2;\nconst square = x => x * x;\nconst doubleSquare = compose(square, double);\nconsole.log(doubleSquare(3)); // 36",
+  
+    "class BinaryHeap {\n  constructor() {\n    this.heap = [];\n  }\n\n  insert(value) {\n    this.heap.push(value);\n    this.bubbleUp();\n  }\n\n  bubbleUp() {\n    let index = this.heap.length - 1;\n    while (index > 0) {\n      let element = this.heap[index];\n      let parentIndex = Math.floor((index - 1) / 2);\n      let parent = this.heap[parentIndex];\n      if (parent >= element) break;\n      this.heap[index] = parent;\n      this.heap[parentIndex] = element;\n      index = parentIndex;\n    }\n  }\n}",
+  
+    "function debounce(func, wait, immediate) {\n  let timeout;\n  return function() {\n    const context = this, args = arguments;\n    const later = function() {\n      timeout = null;\n      if (!immediate) func.apply(context, args);\n    };\n    const callNow = immediate && !timeout;\n    clearTimeout(timeout);\n    timeout = setTimeout(later, wait);\n    if (callNow) func.apply(context, args);\n  };\n}",
+  
+    "class EventEmitter {\n  constructor() {\n    this.events = {};\n  }\n\n  on(event, listener) {\n    if (!this.events[event]) {\n      this.events[event] = [];\n    }\n    this.events[event].push(listener);\n  }\n\n  emit(event, ...args) {\n    if (this.events[event]) {\n      this.events[event].forEach(listener => listener(...args));\n    }\n  }\n\n  removeListener(event, listener) {\n    if (this.events[event]) {\n      this.events[event] = this.events[event].filter(l => l !== listener);\n    }\n  }\n}",
+
+    "function shuffle(array) {\n  let currentIndex = array.length, temporaryValue, randomIndex;\n  while (0 !== currentIndex) {\n    randomIndex = Math.floor(Math.random() * currentIndex);\n    currentIndex -= 1;\n    temporaryValue = array[currentIndex];\n    array[currentIndex] = array[randomIndex];\n    array[randomIndex] = temporaryValue;\n  }\n  return array;\n}",
+
+    "const deepEqual = (x, y) => {\n  if (x === y) return true;\n  if (typeof x !== 'object' || x === null || typeof y !== 'object' || y === null) {\n    return false;\n  }\n  const keysX = Object.keys(x), keysY = Object.keys(y);\n  if (keysX.length !== keysY.length) return false;\n  for (const key of keysX) {\n    if (!keysY.includes(key) || !deepEqual(x[key], y[key])) return false;\n  }\n  return true;\n};",
+
+    "function createObservable() {\n  const observers = [];\n  return {\n    subscribe: function(fn) {\n      observers.push(fn);\n    },\n    notify: function(data) {\n      observers.forEach(fn => fn(data));\n    }\n  };\n}",
+
+    "const pipe = (...fns) => x => fns.reduce((v, f) => f(v), x);",
+
+    "function* fibonacci() {\n  let [prev, curr] = [0, 1];\n  yield prev;\n  yield curr;\n  while (true) {\n    [prev, curr] = [curr, prev + curr];\n    yield curr;\n  }\n}",
+
+    "const memoize = (fn) => {\n  const cache = new Map();\n  return (...args) => {\n    const key = JSON.stringify(args);\n    if (cache.has(key)) return cache.get(key);\n    const result = fn.apply(this, args);\n    cache.set(key, result);\n    return result;\n  };\n};",
+
+    "function debounce(func, wait) {\n  let timeout;\n  return function executedFunction(...args) {\n    const later = () => {\n      clearTimeout(timeout);\n      func(...args);\n    };\n    clearTimeout(timeout);\n    timeout = setTimeout(later, wait);\n  };\n}",
+
+    "const throttle = (func, limit) => {\n  let inThrottle;\n  return function(...args) {\n    if (!inThrottle) {\n      func.apply(this, args);\n      inThrottle = true;\n      setTimeout(() => inThrottle = false, limit);\n    }\n  };\n};",
+
+    "function binarySearch(arr, x) {\n  let start = 0, end = arr.length - 1;\n  while (start <= end) {\n    let mid = Math.floor((start + end) / 2);\n    if (arr[mid] === x) return mid;\n    else if (arr[mid] < x) start = mid + 1;\n    else end = mid - 1;\n  }\n  return -1;\n}",
+
+    "const curry = (fn) => {\n  return function curried(...args) {\n    if (args.length >= fn.length) {\n      return fn.apply(this, args);\n    } else {\n      return function(...args2) {\n        return curried.apply(this, args.concat(args2));\n      };\n    }\n  };\n};",
+
+    "function quickSort(arr) {\n  if (arr.length <= 1) {\n    return arr;\n  }\n  const pivot = arr[Math.floor(arr.length / 2)];\n  const left = arr.filter(x => x < pivot);\n  const middle = arr.filter(x => x === pivot);\n  const right = arr.filter(x => x > pivot);\n  return [...quickSort(left), ...middle, ...quickSort(right)];\n}",
+
+    "class PriorityQueue {\n  constructor() {\n    this.values = [];\n  }\n  enqueue(val, priority) {\n    this.values.push({val, priority});\n    this.sort();\n  }\n  dequeue() {\n    return this.values.shift();\n  }\n  sort() {\n    this.values.sort((a, b) => a.priority - b.priority);\n  }\n}",
+
+    "function* range(start, end, step = 1) {\n  while (start < end) {\n    yield start;\n    start += step;\n  }\n}",
+
+    "const compose = (...fns) => fns.reduce((f, g) => (...args) => f(g(...args)));",
+
+    "function deepClone(obj) {\n  if (obj === null || typeof obj !== 'object') {\n    return obj;\n  }\n  let clone = Array.isArray(obj) ? [] : {};\n  for (let key in obj) {\n    if (Object.prototype.hasOwnProperty.call(obj, key)) {\n      clone[key] = deepClone(obj[key]);\n    }\n  }\n  return clone;\n}",
+  
+    "const once = (fn) => {\n  let called = false;\n  return function(...args) {\n    if (called) return;\n    called = true;\n    return fn.apply(this, args);\n  };\n};",
+  
+    "function* fibonacci() {\n  let [prev, curr] = [0, 1];\n  while (true) {\n    yield curr;\n    [prev, curr] = [curr, prev + curr];\n  }\n}",
+  
+    "const debounce = (func, delay) => {\n  let inDebounce;\n  return function() {\n    const context = this;\n    const args = arguments;\n    clearTimeout(inDebounce);\n    inDebounce = setTimeout(() => func.apply(context, args), delay);\n  };\n};",
+  
+    "function bfs(graph, start) {\n  const queue = [start];\n  const visited = new Set([start]);\n  while (queue.length > 0) {\n    const vertex = queue.shift();\n    console.log(vertex);\n    for (let neighbor of graph[vertex]) {\n      if (!visited.has(neighbor)) {\n        visited.add(neighbor);\n        queue.push(neighbor);\n      }\n    }\n  }\n}",
+  
+    "const memoize = (fn) => {\n  const cache = new Map();\n  return (...args) => {\n    const key = JSON.stringify(args);\n    if (cache.has(key)) return cache.get(key);\n    const result = fn.apply(this, args);\n    cache.set(key, result);\n    return result;\n  };\n};",
+  
+    "function mergeSort(arr) {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  const left = arr.slice(0, mid);\n  const right = arr.slice(mid);\n  return merge(mergeSort(left), mergeSort(right));\n}\n\nfunction merge(left, right) {\n  let result = [];\n  let leftIndex = 0;\n  let rightIndex = 0;\n  while (leftIndex < left.length && rightIndex < right.length) {\n    if (left[leftIndex] < right[rightIndex]) {\n      result.push(left[leftIndex]);",
+
+    "console.log('Hello, world!');",
+    "const x = 42; for (let i = 0; i < x; i++) { console.log(i); }",
+    "function factorial(n) { if (n === 0 || n === 1) { return 1; } return n * factorial(n - 1); } console.log(factorial(5));",
+    "const fruits = ['apple', 'banana', 'orange']; fruits.forEach(fruit => { console.log(fruit.toUpperCase()); });",
+    "class Person { constructor(name, age) { this.name = name; this.age = age; } sayHello() { console.log(`Hello, my name is ${this.name}`); } } const john = new Person('John', 30); john.sayHello();",
+    "const promise = new Promise((resolve, reject) => { setTimeout(() => { resolve('Promise resolved'); }, 2000); }); promise.then(result => console.log(result));",
+    "const numbers = [1, 2, 3, 4, 5]; const sum = numbers.reduce((acc, cur) => acc + cur, 0); console.log(sum);",
+    "function* fibonacci() { let a = 0, b = 1; while (true) { yield a; [a, b] = [b, a + b]; } } const fib = fibonacci(); for (let i = 0; i < 10; i++) { console.log(fib.next().value); }",
+    "const obj = { a: 1, b: 2, c: 3 }; for (let key in obj) { if (obj.hasOwnProperty(key)) { console.log(`${key}: ${obj[key]}`); } }",
+    "const arr = [1, 2, 3, 4, 5]; const [first, second, ...rest] = arr; console.log(first, second, rest);",
+    "const debounce = (func, delay) => { let timeoutId; return (...args) => { clearTimeout(timeoutId); timeoutId = setTimeout(() => func(...args), delay); }; };",
+    "const memoize = (fn) => { const cache = new Map(); return (...args) => { const key = JSON.stringify(args); if (cache.has(key)) return cache.get(key); const result = fn(...args); cache.set(key, result); return result; }; };",
+    "const curry = (fn) => { return function curried(...args) { if (args.length >= fn.length) { return fn.apply(this, args); } else { return function(...args2) { return curried.apply(this, args.concat(args2)); } } }; };",
+    "const compose = (...fns) => (x) => fns.reduceRight((v, f) => f(v), x); const addOne = (x) => x + 1; const double = (x) => x * 2; const addOneThenDouble = compose(double, addOne); console.log(addOneThenDouble(3));",
+    "const throttle = (func, limit) => { let inThrottle; return function(...args) { if (!inThrottle) { func.apply(this, args); inThrottle = true; setTimeout(() => inThrottle = false, limit); } }; };",
+    "const deepClone = (obj) => { if (typeof obj !== 'object' || obj === null) return obj; const newObject = Array.isArray(obj) ? [] : {}; for (let key in obj) { newObject[key] = deepClone(obj[key]); } return newObject; };",
+    "const flattenArray = (arr) => { return arr.reduce((flat, toFlatten) => { return flat.concat(Array.isArray(toFlatten) ? flattenArray(toFlatten) : toFlatten); }, []); }; console.log(flattenArray([1, [2, [3, 4], 5]]));",
+    "const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x); const add10 = (x) => x + 10; const mul2 = (x) => x * 2; const add10ThenMul2 = pipe(add10, mul2); console.log(add10ThenMul2(5));",
+    "const once = (fn) => { let called = false; let result; return function(...args) { if (!called) { result = fn.apply(this, args); called = true; } return result; }; };",
+    "const promisify = (fn) => { return function(...args) { return new Promise((resolve, reject) => { fn.call(this, ...args, (err, result) => { if (err) reject(err); else resolve(result); }); }); }; };",
+    "const zip = (...arrays) => { const maxLength = Math.max(...arrays.map(arr => arr.length)); return Array.from({ length: maxLength }).map((_, i) => { return Array.from({ length: arrays.length }, (_, j) => arrays[j][i]); }); };",
+    "const chunk = (arr, size) => Array.from({ length: Math.ceil(arr.length / size) }, (_, i) => arr.slice(i * size, i * size + size)); console.log(chunk([1, 2, 3, 4, 5], 2));",
+    "const debouncePromise = (fn, delay) => { let timeoutId = null; let resolveList = []; return (...args) => { clearTimeout(timeoutId); return new Promise(resolve => { resolveList.push(resolve); timeoutId = setTimeout(() => { const result = fn.apply(this, args); resolveList.forEach(r => r(result)); resolveList = []; }, delay); }); }; };",
+    "const range = (start, stop, step = 1) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step); console.log(range(0, 10, 2));",
+    "const partition = (arr, predicate) => arr.reduce(([pass, fail], elem) => predicate(elem) ? [[...pass, elem], fail] : [pass, [...fail, elem]], [[], []]);",
+    "const memoizeAsync = (fn) => { const cache = new Map(); return async (...args) => { const key = JSON.stringify(args); if (cache.has(key)) return cache.get(key); const result = await fn(...args); cache.set(key, result); return result; }; };",
+    "const retry = (fn, retries = 3, delay = 1000) => { return new Promise((resolve, reject) => { fn().then(resolve).catch((error) => { if (retries === 0) { reject(error); } else { setTimeout(() => { retry(fn, retries - 1, delay).then(resolve, reject); }, delay); } }); }); };",
+    "const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x); const compose = (...fns) => (x) => fns.reduceRight((v, f) => f(v), x); const add = (a) => (b) => a + b; const multiply = (a) => (b) => a * b; const addThenMultiply = pipe(add(2), multiply(3)); console.log(addThenMultiply(5));",
+    "const curryN = (fn, arity = fn.length) => { return function curried(...args) { if (args.length >= arity) return fn(...args); return (...moreArgs) => curried(...args, ...moreArgs); }; };",
+    "const deepFreeze = (obj) => { Object.keys(obj).forEach((prop) => { if (typeof obj[prop] === 'object' && !Object.isFrozen(obj[prop])) { deepFreeze(obj[prop]); } }); return Object.freeze(obj); };",
+    "const promiseAll = (promises) => { return new Promise((resolve, reject) => { if (!Array.isArray(promises)) { return reject(new TypeError('Argument must be an array')); } const results = new Array(promises.length); let unresolved = promises.length; if (unresolved === 0) { resolve(results); } promises.forEach((promise, index) => { Promise.resolve(promise).then((value) => { results[index] = value; unresolved -= 1; if (unresolved === 0) { resolve(results); } }, (reason) => { reject(reason); }); }); }); };",
+    "const quickSort = (arr) => { if (arr.length <= 1) return arr; const pivot = arr[arr.length - 1]; const left = []; const right = []; for (let i = 0; i < arr.length - 1; i++) { if (arr[i] < pivot) { left.push(arr[i]); } else { right.push(arr[i]); } } return [...quickSort(left), pivot, ...quickSort(right)]; };",
+    "const binarySearch = (arr, target) => { let left = 0; let right = arr.length - 1; while (left <= right) { const mid = Math.floor((left + right) / 2); if (arr[mid] === target) return mid; if (arr[mid] < target) { left = mid + 1; } else { right = mid - 1; } } return -1; };",
+    "const mergeSort = (arr) => { if (arr.length <= 1) return arr; const mid = Math.floor(arr.length / 2); const left = arr.slice(0, mid); const right = arr.slice(mid); return merge(mergeSort(left), mergeSort(right)); }; const merge = (left, right) => { const result = []; let leftIndex = 0; let rightIndex = 0; while (leftIndex < left.length && rightIndex < right.length) { if (left[leftIndex] < right[rightIndex]) { result.push(left[leftIndex]); leftIndex++; } else { result.push(right[rightIndex]); rightIndex++; } } return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex)); };",
+    "const deepEqual = (a, b) => { if (a === b) return true; if (typeof a !== ‘object’ || typeof b !== ‘object’ || a === null || b === null) return false; const keysA = Object.keys(a); const keysB = Object.keys(b); if (keysA.length !== keysB.length) return false; for (let key of keysA) { if (!keysB.includes(key) || !deepEqual(a[key], b[key])) return false; } return true; };",
+    "const fibonacci = (n) => { if (n <= 1) return n; let a = 0, b = 1; for (let i = 2; i <= n; i++) { [a, b] = [b, a + b]; } return b; }; console.log(fibonacci(10));",
+    "const throttle = (func, limit) => { let lastFunc; let lastRan; return function(…args) { if (!lastRan) { func.apply(this, args); lastRan = Date.now(); } else { clearTimeout(lastFunc); lastFunc = setTimeout(() => { if ((Date.now() - lastRan) >= limit) { func.apply(this, args); lastRan = Date.now(); } }, limit - (Date.now() - lastRan)); } }; };",
+    "const findLongestWord = (str) => { const words = str.split(’ ‘); return words.reduce((longest, current) => { return current.length > longest.length ? current : longest; }, ‘’); }; console.log(findLongestWord(‘The quick brown fox jumped over the lazy dog’));",
+    "const isPalindrome = (str) => { const cleanStr = str.toLowerCase().replace(/[^a-z0-9]/g, ‘’); return cleanStr === cleanStr.split(’’).reverse().join(’’); }; console.log(isPalindrome(‘A man, a plan, a canal: Panama’));",
+    "const memoize = (fn) => { const cache = new Map(); return (…args) => { const key = JSON.stringify(args); if (cache.has(key)) { return cache.get(key); } const result = fn.apply(this, args); cache.set(key, result); return result; }; };",
+    "const promiseRace = (promises) => { return new Promise((resolve, reject) => { promises.forEach(promise => { Promise.resolve(promise).then(resolve, reject); }); }); };",
+    "const debounce = (func, wait) => { let timeout; return function executedFunction(…args) { const later = () => { clearTimeout(timeout); func(…args); }; clearTimeout(timeout); timeout = setTimeout(later, wait); }; };",
+    "const flattenObject = (obj, prefix = ‘’) => { return Object.keys(obj).reduce((acc, k) => { const pre = prefix.length ? prefix + ‘.’ : ‘’; if (typeof obj[k] === ‘object’ && obj[k] !== null && !Array.isArray(obj[k])) { Object.assign(acc, flattenObject(obj[k], pre + k)); } else { acc[pre + k] = obj[k]; } return acc; }, {}); };",
+    "const curry = (fn) => { return function curried(…args) { if (args.length >= fn.length) { return fn.apply(this, args); } else { return function(…args2) { return curried.apply(this, args.concat(args2)); } } }; };",
+    "console.log('Hello, world!');",
+    "const x = 42; for (let i = 0; i < x; i++) { console.log(i); }",
+    "function factorial(n) { if (n === 0 || n === 1) { return 1; } return n * factorial(n - 1); } console.log(factorial(5));",
+    "const fruits = ['apple', 'banana', 'orange']; fruits.forEach(fruit => { console.log(fruit.toUpperCase()); });",
+    "class Person { constructor(name, age) { this.name = name; this.age = age; } sayHello() { console.log(`Hello, my name is ${this.name}`); } } const john = new Person('John', 30); john.sayHello();",
+    "const promise = new Promise((resolve, reject) => { setTimeout(() => { resolve('Promise resolved'); }, 2000); }); promise.then(result => console.log(result));",
+    "const numbers = [1, 2, 3, 4, 5]; const sum = numbers.reduce((acc, cur) => acc + cur, 0); console.log(sum);",
+    "function* fibonacci() { let a = 0, b = 1; while (true) { yield a; [a, b] = [b, a + b]; } } const fib = fibonacci(); for (let i = 0; i < 10; i++) { console.log(fib.next().value); }",
+    "const obj = { a: 1, b: 2, c: 3 }; for (let key in obj) { if (obj.hasOwnProperty(key)) { console.log(`${key}: ${obj[key]}`); } }",
+    "const arr = [1, 2, 3, 4, 5]; const [first, second, ...rest] = arr; console.log(first, second, rest);",
+    "const debounce = (func, delay) => { let timeoutId; return (...args) => { clearTimeout(timeoutId); timeoutId = setTimeout(() => func(...args), delay); }; };",
+    "const memoize = (fn) => { const cache = new Map(); return (...args) => { const key = JSON.stringify(args); if (cache.has(key)) return cache.get(key); const result = fn(...args); cache.set(key, result); return result; }; };",
+    "const curry = (fn) => { return function curried(...args) { if (args.length >= fn.length) { return fn.apply(this, args); } else { return function(...args2) { return curried.apply(this, args.concat(args2)); } } }; };",
+    "const compose = (...fns) => (x) => fns.reduceRight((v, f) => f(v), x); const addOne = (x) => x + 1; const double = (x) => x * 2; const addOneThenDouble = compose(double, addOne); console.log(addOneThenDouble(3));",
+    "const throttle = (func, limit) => { let inThrottle; return function(...args) { if (!inThrottle) { func.apply(this, args); inThrottle = true; setTimeout(() => inThrottle = false, limit); } }; };",
+    "const deepClone = (obj) => { if (typeof obj !== 'object' || obj === null) return obj; const newObject = Array.isArray(obj) ? [] : {}; for (let key in obj) { newObject[key] = deepClone(obj[key]); } return newObject; };",
+    "const flattenArray = (arr) => { return arr.reduce((flat, toFlatten) => { return flat.concat(Array.isArray(toFlatten) ? flattenArray(toFlatten) : toFlatten); }, []); }; console.log(flattenArray([1, [2, [3, 4], 5]]));",
+    "const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x); const add10 = (x) => x + 10; const mul2 = (x) => x * 2; const add10ThenMul2 = pipe(add10, mul2); console.log(add10ThenMul2(5));",
+    "const once = (fn) => { let called = false; let result; return function(...args) { if (!called) { result = fn.apply(this, args); called = true; } return result; }; };",
+    "const promisify = (fn) => { return function(...args) { return new Promise((resolve, reject) => { fn.call(this, ...args, (err, result) => { if (err) reject(err); else resolve(result); }); }); }; };",
+    "const zip = (...arrays) => { const maxLength = Math.max(...arrays.map(arr => arr.length)); return Array.from({ length: maxLength }).map((_, i) => { return Array.from({ length: arrays.length }, (_, j) => arrays[j][i]); }); };",
+    "const chunk = (arr, size) => Array.from({ length: Math.ceil(arr.length / size) }, (_, i) => arr.slice(i * size, i * size + size)); console.log(chunk([1, 2, 3, 4, 5], 2));",
+    "const debouncePromise = (fn, delay) => { let timeoutId = null; let resolveList = []; return (...args) => { clearTimeout(timeoutId); return new Promise(resolve => { resolveList.push(resolve); timeoutId = setTimeout(() => { const result = fn.apply(this, args); resolveList.forEach(r => r(result)); resolveList = []; }, delay); }); }; };",
+    "const range = (start, stop, step = 1) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step); console.log(range(0, 10, 2));",
+    "const partition = (arr, predicate) => arr.reduce(([pass, fail], elem) => predicate(elem) ? [[...pass, elem], fail] : [pass, [...fail, elem]], [[], []]);",
+    "const memoizeAsync = (fn) => { const cache = new Map(); return async (...args) => { const key = JSON.stringify(args); if (cache.has(key)) return cache.get(key); const result = await fn(...args); cache.set(key, result); return result; }; };",
+    "const retry = (fn, retries = 3, delay = 1000) => { return new Promise((resolve, reject) => { fn().then(resolve).catch((error) => { if (retries === 0) { reject(error); } else { setTimeout(() => { retry(fn, retries - 1, delay).then(resolve, reject); }, delay); } }); }); };",
+    "const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x); const compose = (...fns) => (x) => fns.reduceRight((v, f) => f(v), x); const add = (a) => (b) => a + b; const multiply = (a) => (b) => a * b; const addThenMultiply = pipe(add(2), multiply(3)); console.log(addThenMultiply(5));",
+    "const curryN = (fn, arity = fn.length) => { return function curried(...args) { if (args.length >= arity) return fn(...args); return (...moreArgs) => curried(...args, ...moreArgs); }; };",
+    "const deepFreeze = (obj) => { Object.keys(obj).forEach((prop) => { if (typeof obj[prop] === 'object' && !Object.isFrozen(obj[prop])) { deepFreeze(obj[prop]); } }); return Object.freeze(obj); };",
+    "const promiseAll = (promises) => { return new Promise((resolve, reject) => { if (!Array.isArray(promises)) { return reject(new TypeError('Argument must be an array')); } const results = new Array(promises.length); let unresolved = promises.length; if (unresolved === 0) { resolve(results); } promises.forEach((promise, index) => { Promise.resolve(promise).then((value) => { results[index] = value; unresolved -= 1; if (unresolved === 0) { resolve(results); } }, (reason) => { reject(reason); }); }); }); };",
+    "const quickSort = (arr) => { if (arr.length <= 1) return arr; const pivot = arr[arr.length - 1]; const left = []; const right = []; for (let i = 0; i < arr.length - 1; i++) { if (arr[i] < pivot) { left.push(arr[i]); } else { right.push(arr[i]); } } return [...quickSort(left), pivot, ...quickSort(right)]; };",
+    "console.log('Hello, world!');",
+    "const x = 42; for (let i = 0; i < x; i++) { console.log(i); }",
+    "function factorial(n) { if (n === 0 || n === 1) { return 1; } return n * factorial(n - 1); } console.log(factorial(5));",
+    "const fruits = ['apple', 'banana', 'orange']; fruits.forEach(fruit => { console.log(fruit.toUpperCase()); });",
+    "class Person { constructor(name, age) { this.name = name; this.age = age; } sayHello() { console.log(`Hello, my name is ${this.name}`); } } const john = new Person('John', 30); john.sayHello();",
+    "const promise = new Promise((resolve, reject) => { setTimeout(() => { resolve('Promise resolved'); }, 2000); }); promise.then(result => console.log(result));",
+    "const numbers = [1, 2, 3, 4, 5]; const sum = numbers.reduce((acc, cur) => acc + cur, 0); console.log(sum);",
+    "function* fibonacci() { let a = 0, b = 1; while (true) { yield a; [a, b] = [b, a + b]; } } const fib = fibonacci(); for (let i = 0; i < 10; i++) { console.log(fib.next().value); }",
+    "const obj = { a: 1, b: 2, c: 3 }; for (let key in obj) { if (obj.hasOwnProperty(key)) { console.log(`${key}: ${obj[key]}`); } }",
+    "const arr = [1, 2, 3, 4, 5]; const [first, second, ...rest] = arr; console.log(first, second, rest);",
+    "const debounce = (func, delay) => { let timeoutId; return (...args) => { clearTimeout(timeoutId); timeoutId = setTimeout(() => func(...args), delay); }; };",
+    "const memoize = (fn) => { const cache = new Map(); return (...args) => { const key = JSON.stringify(args); if (cache.has(key)) return cache.get(key); const result = fn(...args); cache.set(key, result); return result; }; };",
+    "const curry = (fn) => { return function curried(...args) { if (args.length >= fn.length) { return fn.apply(this, args); } else { return function(...args2) { return curried.apply(this, args.concat(args2)); } } }; };",
+    "const compose = (...fns) => (x) => fns.reduceRight((v, f) => f(v), x); const addOne = (x) => x + 1; const double = (x) => x * 2; const addOneThenDouble = compose(double, addOne); console.log(addOneThenDouble(3));",
+    "const throttle = (func, limit) => { let inThrottle; return function(...args) { if (!inThrottle) { func.apply(this, args); inThrottle = true; setTimeout(() => inThrottle = false, limit); } }; };",
+    "const deepClone = (obj) => { if (typeof obj !== 'object' || obj === null) return obj; const newObject = Array.isArray(obj) ? [] : {}; for (let key in obj) { newObject[key] = deepClone(obj[key]); } return newObject; };",
+    "const flattenArray = (arr) => { return arr.reduce((flat, toFlatten) => { return flat.concat(Array.isArray(toFlatten) ? flattenArray(toFlatten) : toFlatten); }, []); }; console.log(flattenArray([1, [2, [3, 4], 5]]));",
+    "const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x); const add10 = (x) => x + 10; const mul2 = (x) => x * 2; const add10ThenMul2 = pipe(add10, mul2); console.log(add10ThenMul2(5));",
+    "const once = (fn) => { let called = false; let result; return function(...args) { if (!called) { result = fn.apply(this, args); called = true; } return result; }; };",
+    "const promisify = (fn) => { return function(...args) { return new Promise((resolve, reject) => { fn.call(this, ...args, (err, result) => { if (err) reject(err); else resolve(result); }); }); }; };",
+    "const zip = (...arrays) => { const maxLength = Math.max(...arrays.map(arr => arr.length)); return Array.from({ length: maxLength }).map((_, i) => { return Array.from({ length: arrays.length }, (_, j) => arrays[j][i]); }); };",
+    "const chunk = (arr, size) => Array.from({ length: Math.ceil(arr.length / size) }, (_, i) => arr.slice(i * size, i * size + size)); console.log(chunk([1, 2, 3, 4, 5], 2));",
+    "const debouncePromise = (fn, delay) => { let timeoutId = null; let resolveList = []; return (...args) => { clearTimeout(timeoutId); return new Promise(resolve => { resolveList.push(resolve); timeoutId = setTimeout(() => { const result = fn.apply(this, args); resolveList.forEach(r => r(result)); resolveList = []; }, delay); }); }; };",
+    "const range = (start, stop, step = 1) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step); console.log(range(0, 10, 2));",
+    "const partition = (arr, predicate) => arr.reduce(([pass, fail], elem) => predicate(elem) ? [[...pass, elem], fail] : [pass, [...fail, elem]], [[], []]);",
+    "const memoizeAsync = (fn) => { const cache = new Map(); return async (...args) => { const key = JSON.stringify(args); if (cache.has(key)) return cache.get(key); const result = await fn(...args); cache.set(key, result); return result; }; };",
+    "const retry = (fn, retries = 3, delay = 1000) => { return new Promise((resolve, reject) => { fn().then(resolve).catch((error) => { if (retries === 0) { reject(error); } else { setTimeout(() => { retry(fn, retries - 1, delay).then(resolve, reject); }, delay); } }); }); };",
+    "const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x); const compose = (...fns) => (x) => fns.reduceRight((v, f) => f(v), x); const add = (a) => (b) => a + b; const multiply = (a) => (b) => a * b; const addThenMultiply = pipe(add(2), multiply(3)); console.log(addThenMultiply(5));",
+    "const curryN = (fn, arity = fn.length) => { return function curried(...args) { if (args.length >= arity) return fn(...args); return (...moreArgs) => curried(...args, ...moreArgs); }; };",
+    "const deepFreeze = (obj) => { Object.keys(obj).forEach((prop) => { if (typeof obj[prop] === 'object' && !Object.isFrozen(obj[prop])) { deepFreeze(obj[prop]); } }); return Object.freeze(obj); };",
+    "const promiseAll = (promises) => { return new Promise((resolve, reject) => { if (!Array.isArray(promises)) { return reject(new TypeError('Argument must be an array')); } const results = new Array(promises.length); let unresolved = promises.length; if (unresolved === 0) { resolve(results); } promises.forEach((promise, index) => { Promise.resolve(promise).then((value) => { results[index] = value; unresolved -= 1; if (unresolved === 0) { resolve(results); } }, (reason) => { reject(reason); }); }); }); };",
+    "const quickSort = (arr) => { if (arr.length <= 1) return arr; const pivot = arr[arr.length - 1]; const left = []; const right = []; for (let i = 0; i < arr.length - 1; i++) { if (arr[i] < pivot) { left.push(arr[i]); } else { right.push(arr[i]); } } return [...quickSort(left), pivot, ...quickSort(right)]; };",
+    "const average = (arr) => arr.reduce((a, b) => a + b, 0) / arr.length; console.log(average([1, 2, 3, 4, 5]));",
+    "const flatten = (arr) => arr.flat(Infinity); console.log(flatten([1, [2, [3, [4, 5]]]]));",
+    "const groupBy = (arr, key) => arr.reduce((result, obj) => { (result[obj[key]] = result[obj[key]] || []).push(obj); return result; }, {});",
+    "const unique = (arr) => arr.filter((v, i, a) => a.indexOf(v) === i); console.log(unique([1, 2, 2, 3, 4, 4]));",
+    "const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms)); delay(1000).then(() => console.log('Executed after 1 second'));",
+    "const isAnagram = (str1, str2) => str1.split('').sort().join('') === str2.split('').sort().join(''); console.log(isAnagram('listen', 'silent'));",
+    "const objectFromPairs = (pairs) => pairs.reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}); console.log(objectFromPairs([['a', 1], ['b', 2]]));",
+    "const compact = (arr) => arr.filter(Boolean); console.log(compact([0, 1, false, 2, '', 3]));",
+    "const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1); console.log(capitalize('hello'));",
+    "const range = (start, end) => Array.from({ length: end - start + 1 }, (_, i) => start + i); console.log(range(5, 10));",
+    "const fibonacci = n => { if (n <= 1) return n; let a = 0, b = 1; for (let i = 2; i <= n; i++) { [a, b] = [b, a + b]; } return b; };",
+      
+    "const quickSort = arr => { if (arr.length <= 1) return arr; const pivot = arr[arr.length - 1]; const left = arr.filter((x, i) => x <= pivot && i !== arr.length - 1); const right = arr.filter(x => x > pivot); return [...quickSort(left), pivot, ...quickSort(right)]; };",
+    
+    "const debounce = (fn, delay) => { let timer; return function(...args) { clearTimeout(timer); timer = setTimeout(() => fn.apply(this,args), delay); }; };",
+
+    "const memoize = fn => { const cache = new Map(); return (...args) => { const key = JSON.stringify(args); if (cache.has(key)) return cacheget(key); const result = fn.apply(this, args); cache.set(key, result); return result; }; };",
+
+    "const curry = (fn, arity = fn.length) => { return function curried(...args) { if (args.length >= arity) return fn(...args); return (..more) => curried(...args, ...more); }; };",
+
+    "const pipe = (...fns) => x => fns.reduce((v, f) => f(v), x);",
+
+    "const compose = (...fns) => x => fns.reduceRight((v, f) => f(v), x);",
+
+    "const throttle = (fn, limit) => { let inThrottle; return function(...args) { if (!inThrottle) { fn.apply(this, args); inThrottle = true;setTimeout(() => inThrottle = false, limit); } }; };",
+
+    "const deepClone = obj => { if (typeof obj !== 'object' || obj === null) return obj; const newObj = Array.isArray(obj) ? [] : {}; for (letkey in obj) newObj[key] = deepClone(obj[key]); return newObj; };",
+
+    "const promiseAll = promises => { return new Promise((resolve, reject) => { const results = []; let completed = 0; promises.forEac((promise, index) => { Promise.resolve(promise).then(value => { results[index] = value; completed++; if (completed === promises.length)resolve(results); }).catch(reject); }); }); };",
+
+    "const binarySearch = (arr, target) => { let left = 0, right = arr.length - 1; while (left <= right) { const mid = Math.floor((left +right) / 2); if (arr[mid] === target) return mid; if (arr[mid] < target) left = mid + 1; else right = mid - 1; } return -1; };",
+
+    "const flattenArray = arr => arr.reduce((flat, toFlatten) => flat.concat(Array.isArray(toFlatten) ? flattenArray(toFlatten) : toFlatten),[]);",
+
+    "const once = fn => { let called = false, result; return function(...args) { if (!called) { result = fn.apply(this, args); called = true; }return result; }; };",
+
+    "const zip = (...arrays) => { const maxLength = Math.max(...arrays.map(arr => arr.length)); return Array.from({ length: maxLength }).ma((_, i) => arrays.map(arr => arr[i])); };",
+
+    "const promisify = fn => { return function(...args) { return new Promise((resolve, reject) => { fn.call(this, ...args, (err, result) => {if (err) reject(err); else resolve(result); }); }); }; };"
+
+]

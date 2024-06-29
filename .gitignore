@@ -1,0 +1,7 @@
+data/accounts.json
+node_modules/
+*.bak
+*.log
+package-lock.json
+schedule_plan.csv
+*.DS_Store*
