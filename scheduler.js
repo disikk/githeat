@@ -89,16 +89,21 @@ async function scheduleRandomCommits() {
 
         while (remainingCommits > 0) {
             for (let i = 0; i < TOTAL_DAYS && remainingCommits > 0; i++) {
-                let dailyCommits = Math.min(Math.floor(Math.random() * (MAX_COMMITS_PER_DAY + 1)), remainingCommits);
-                remainingCommits -= dailyCommits;
-                dailyCommitPlan[i] += dailyCommits;
+                if (dailyCommitPlan[i] < MAX_COMMITS_PER_DAY) {
+                    dailyCommitPlan[i]++;
+                    remainingCommits--;
+                }
             }
         }
 
         const commitPromises = dailyCommitPlan.map((commits, i) => {
             const promises = [];
             for (let j = 0; j < commits; j++) {
-                const nextTime = new Date(Date.now() + i * 86400000 + Math.random() * 86400000); // Случайное время в течение дня
+                const day = new Date();
+                day.setDate(day.getDate() + i);
+                day.setHours(0, 0, 0, 0); // Начало календарного дня
+                const nextTime = new Date(day.getTime() + Math.random() * 86400000); // Случайное время в течение дня
+
                 const codeSnippet = getRandomElement(codeSnippets);
                 const commitMessage = getRandomElement(commitMessages);
                 const fileName = getRandomElement(fileNames);
@@ -127,8 +132,6 @@ async function scheduleRandomCommits() {
         });
 
         await Promise.all(commitPromises);
-
-       
     });
 
     await Promise.all(accountPromises);
