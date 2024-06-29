@@ -119,19 +119,22 @@ fi
 # Создание алиасов для проверки логов и перезапуска сервиса
 BASH_ALIASES=~/.bash_aliases
 if ! grep -q "alias ${SERVICE_NAME}_logs" $BASH_ALIASES; then
-    echo "Создание алиаса для проверки логов..."
-    echo "alias ${SERVICE_NAME}_logs='sudo journalctl -u ${SERVICE_NAME} -fn 50 -o cat'" >> $BASH_ALIASES
-    echo "Алиас ${SERVICE_NAME}_logs создан."
+    echo "alias ${SERVICE_NAME}_logs='sudo journalctl -u ${SERVICE_NAME} -fn 30 -o cat'" >> $BASH_ALIASES
 fi
 
 if ! grep -q "alias ${SERVICE_NAME}_restart" $BASH_ALIASES; then
-    echo "Создание алиаса для перезапуска сервиса..."
-    echo "alias ${SERVICE_NAME}_restart='sudo systemctl restart ${SERVICE_NAME} && sudo journalctl -u ${SERVICE_NAME} -fn 50 -o cat'" >> $BASH_ALIASES
-    echo "Алиас ${SERVICE_NAME}_restart создан."
+    echo "alias ${SERVICE_NAME}_restart='sudo systemctl restart ${SERVICE_NAME} && sudo journalctl -u ${SERVICE_NAME} -fn 30 -o cat'" >> $BASH_ALIASES
+fi
+if ! grep -q "alias ${SERVICE_NAME}_logs" $BASH_ALIASES; then
+    echo "alias ${SERVICE_NAME}_stop='sudo systemctl stop ${SERVICE_NAME}'" >> $BASH_ALIASES
 fi
 
 # Перезагрузка bash_aliases, чтобы алиасы стали доступны
 source $BASH_ALIASES
 
-echo "Вывод логов скрипта: ${SERVICE_NAME}_logs\nЗапуск/рестарт скрипта: ${SERVICE_NAME}_restart"
-echo "Для конфигурации внесите изменения в файлах\n${HOME}/${PROJECT_DIR}/config.js\n${HOME}/${PROJECT_DIR}/data/accounts.json"
+echo "Вывод логов скрипта: ${SERVICE_NAME}_logs
+Запуск/рестарт скрипта: ${SERVICE_NAME}_restart
+Остановка: ${SERVICE_NAME}_stop"
+echo "Для конфигурации внесите изменения в файлах
+${PROJECT_DIR}/config.js
+${PROJECT_DIR}/data/accounts.json"
