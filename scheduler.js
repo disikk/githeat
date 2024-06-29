@@ -88,11 +88,10 @@ async function scheduleRandomCommits() {
         let dailyCommitPlan = Array(TOTAL_DAYS).fill(0);
 
         while (remainingCommits > 0) {
-            for (let i = 0; i < TOTAL_DAYS && remainingCommits > 0; i++) {
-                if (dailyCommitPlan[i] < MAX_COMMITS_PER_DAY) {
-                    dailyCommitPlan[i]++;
-                    remainingCommits--;
-                }
+            const dayIndex = Math.floor(Math.random() * TOTAL_DAYS);
+            if (dailyCommitPlan[dayIndex] < MAX_COMMITS_PER_DAY) {
+                dailyCommitPlan[dayIndex]++;
+                remainingCommits--;
             }
         }
 
