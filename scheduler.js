@@ -93,6 +93,7 @@ async function scheduleRandomCommits() {
                 if (remainingCommits <= 0) break;
 
                 const dailyCommits = Math.min(Math.floor(Math.random() * (MAX_COMMITS_PER_DAY + 1)), remainingCommits);
+                remainingCommits -= dailyCommits;
 
                 for (let j = 0; j < dailyCommits; j++) {
                     const nextTime = new Date(Date.now() + i * 86400000 + Math.random() * 86400000); // Случайное время в течение дня
