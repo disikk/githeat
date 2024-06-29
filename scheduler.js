@@ -84,52 +84,51 @@ async function scheduleRandomCommits() {
         const accountInfo = await getAccountInfo(octokit, login);
         console.log(chalk.greenBright(`Account ${account.username}: Total commits: ${accountInfo.totalCommits}, Created: ${accountInfo.creationDate} (${accountInfo.ageInDays} days ago)`));
 
-        const remainingCommits = COMMITS_PER_ACCOUNT - accountInfo.totalCommits;
+        let remainingCommits = COMMITS_PER_ACCOUNT - accountInfo.totalCommits;
+        let dailyCommitPlan = Array(TOTAL_DAYS).fill(0);
 
-        if (remainingCommits > 0) {
-            const commitPromises = [];
-
-            for (let i = 0; i < TOTAL_DAYS; i++) {
-                if (remainingCommits <= 0) break;
-
-                const dailyCommits = Math.min(Math.floor(Math.random() * (MAX_COMMITS_PER_DAY + 1)), remainingCommits);
+        while (remainingCommits > 0) {
+            for (let i = 0; i < TOTAL_DAYS && remainingCommits > 0; i++) {
+                let dailyCommits = Math.min(Math.floor(Math.random() * (MAX_COMMITS_PER_DAY + 1)), remainingCommits);
                 remainingCommits -= dailyCommits;
-
-                for (let j = 0; j < dailyCommits; j++) {
-                    const nextTime = new Date(Date.now() + i * 86400000 + Math.random() * 86400000); // Случайное время в течение дня
-                    const codeSnippet = getRandomElement(codeSnippets);
-                    const commitMessage = getRandomElement(commitMessages);
-                    const fileName = getRandomElement(fileNames);
-
-                    commitPromises.push(
-                        listReposWithRetry(octokit)
-                            .then(repos => {
-                                const repoChoice = repos.length > 0 ? Math.floor(Math.random() * (repos.length + 1)) : 0;
-                                const repoName = repoChoice === repos.length ? 'NEW_REPO' : repos[repoChoice].name;
-
-                                scheduledJobs.push({ account: account.username, time: nextTime });
-
-                                const dateKey = nextTime.toDateString();
-                                if (!schedulePlan[dateKey]) {
-                                    schedulePlan[dateKey] = {};
-                                }
-                                schedulePlan[dateKey][account.username] = (schedulePlan[dateKey][account.username] || 0) + 1;
-
-                                return schedule.scheduleJob(nextTime, async () => {
-                                    await makeRandomCommit(account, login, repoName, fileName, commitMessage, codeSnippet, nextTime);
-                                });
-                            })
-                    );
-                }
+                dailyCommitPlan[i] += dailyCommits;
             }
-
-            await Promise.all(commitPromises);
         }
 
-        //const lastJob = scheduledJobs.filter(job => job.account === account.username).sort((a, b) => b.time - a.time)[0];
-        //if (lastJob) {
-        //    console.log(chalk.greenBright(`Account ${account.username}: Final scheduled task at ${lastJob.time}`));
-        //}
+        const commitPromises = dailyCommitPlan.map((commits, i) => {
+            const promises = [];
+            for (let j = 0; j < commits; j++) {
+                const nextTime = new Date(Date.now() + i * 86400000 + Math.random() * 86400000); // Случайное время в течение дня
+                const codeSnippet = getRandomElement(codeSnippets);
+                const commitMessage = getRandomElement(commitMessages);
+                const fileName = getRandomElement(fileNames);
+
+                promises.push(
+                    listReposWithRetry(octokit)
+                        .then(repos => {
+                            const repoChoice = repos.length > 0 ? Math.floor(Math.random() * (repos.length + 1)) : 0;
+                            const repoName = repoChoice === repos.length ? 'NEW_REPO' : repos[repoChoice].name;
+
+                            scheduledJobs.push({ account: account.username, time: nextTime });
+
+                            const dateKey = nextTime.toDateString();
+                            if (!schedulePlan[dateKey]) {
+                                schedulePlan[dateKey] = {};
+                            }
+                            schedulePlan[dateKey][account.username] = (schedulePlan[dateKey][account.username] || 0) + 1;
+
+                            return schedule.scheduleJob(nextTime, async () => {
+                                await makeRandomCommit(account, login, repoName, fileName, commitMessage, codeSnippet, nextTime);
+                            });
+                        })
+                );
+            }
+            return Promise.all(promises);
+        });
+
+        await Promise.all(commitPromises);
+
+       
     });
 
     await Promise.all(accountPromises);
