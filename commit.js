@@ -1,8 +1,9 @@
 const { Octokit } = require('@octokit/rest');
 const { checkFileExists, getRandomElement, createNewRepo } = require('./utils');
-const { fileNames, randomWords } = require('./config');
+const { fileNames, randomWords, STAR_PROBABILITY } = require('./config');
 const HttpsProxyAgent = require('https-proxy-agent');
 const chalk = require('chalk');
+const { getRandomRepo, starRepo } = require('./star');
 
 const MAX_RETRIES = 5;
 const RETRY_DELAY = 5000;
@@ -96,11 +97,18 @@ async function makeRandomCommit(account, login, repoName, fileName, commitMessag
         const { activeDays, totalCommits } = await getActiveDaysAndCommits(octokit, login);
         const { creationDate, ageInDays } = await getAccountCreationDate(octokit, login);
         console.log(chalk.greenBright("Account ${account.username}: Active days: ${activeDays}, Total commits: ${totalCommits}, Created: ${creationDate} (${ageInDays} days ago)"));
-        } catch (error) {
+
+        // С вероятностью 15% ставим звездочку случайному репозиторию
+        if (Math.random() < STAR_PROBABILITY) {
+            const repo = await getRandomRepo();
+            await starRepo(account, repo.owner.login, repo.name);
+        }
+    }
+    catch (error) {
         console.error("Account ${account.username}: Failed to commit: ${error}");
-        }
-        }
+    }
+}
         
-        module.exports = {
-        makeRandomCommit
-        };
+module.exports = {
+    makeRandomCommit
+};

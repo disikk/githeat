@@ -6,6 +6,7 @@ module.exports = {
     COMMITS_PER_ACCOUNT: 60,
     REPOS_THRESHOLD: 5,
     MAX_COMMITS_PER_DAY: 3, // Максимальное количество коммитов в день
+    STAR_PROBABILITY: 0.15,
     accounts: JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'accounts.json'))),
     codeSnippets: JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'code_snippets.json'))),
     randomWords: JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'random_words.json'))),
