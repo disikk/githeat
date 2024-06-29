@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Путь к вашему проекту
-REPO_URL="https://github.com/your_username/your_project.git"
+REPO_URL="https://github.com/disikk/githeat"
 PROJECT_DIR="$HOME/githeat"
 SERVICE_NAME="githeat"
 SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
