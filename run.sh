@@ -24,7 +24,8 @@ fi
 # Клонирование репозитория
 if [ ! -d "$PROJECT_DIR" ]; then
     echo "Клонирование репозитория..."
-    git clone $REPO_URL $PROJECT_DIR
+    cd $HOME
+    git clone $REPO_URL
 else
     echo "Репозиторий уже клонирован."
 fi
@@ -58,6 +59,30 @@ cd "$PROJECT_DIR"
 # Установка зависимостей
 echo "Установка зависимостей..."
 npm install
+
+#Создаем болванку файла с аккаунтами
+ACCOUNTS_FILE="./data/accounts.json"
+if [ ! -f "$ACCOUNTS_FILE" ]; then
+    cat <<EOF > $ACCOUNTS_FILE
+[
+    {
+        "username": "example1",
+        "token": "ghp_exampletoken1",
+        "proxy": "http://username:password@proxyaddress:port"
+    },
+    {
+        "username": "example2",
+        "token": "ghp_exampletoken2",
+        "proxy": "http://username:password@proxyaddress:port"
+    },
+    {
+        "username": "example3",
+        "token": "ghp_exampletoken3",
+        "proxy": "http://username:password@proxyaddress:port"
+    }
+]
+EOF
+fi
 
 # Создание и запуск системного сервиса
 if [ ! -f "$SERVICE_FILE" ]; then
