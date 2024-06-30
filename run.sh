@@ -119,14 +119,20 @@ fi
 # Создание алиасов для проверки логов и перезапуска сервиса
 BASH_PROFILE="${HOME}/.bash_profile"
 if ! grep -q "alias ${SERVICE_NAME}_logs" $BASH_PROFILE; then
+    echo "раз_1"
     echo "alias ${SERVICE_NAME}_logs='sudo journalctl -u ${SERVICE_NAME} -fn 30 -o cat'" >> $BASH_PROFILE
+    echo "раз_2"
 fi
 
 if ! grep -q "alias ${SERVICE_NAME}_restart" $BASH_PROFILE; then
+    echo "два_1"
     echo "alias ${SERVICE_NAME}_restart='sudo systemctl restart ${SERVICE_NAME} && sudo journalctl -u ${SERVICE_NAME} -fn 30 -o cat'" >> $BASH_PROFILE
+    echo "два_2"
 fi
 if ! grep -q "alias ${SERVICE_NAME}_stop" $BASH_PROFILE; then
+    echo "три_1"
     echo "alias ${SERVICE_NAME}_stop='sudo systemctl stop ${SERVICE_NAME}'" >> $BASH_PROFILE
+    echo "три_2"
 fi
 
 # Перезагрузка bash_PROFILE, чтобы алиасы стали доступны
