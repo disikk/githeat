@@ -96,7 +96,7 @@ async function makeRandomCommit(account, login, repoName, fileName, commitMessag
 
         const { activeDays, totalCommits } = await getActiveDaysAndCommits(octokit, login);
         const { creationDate, ageInDays } = await getAccountCreationDate(octokit, login);
-        console.log(chalk.greenBright("Account ${account.username}: Active days: ${activeDays}, Total commits: ${totalCommits}, Created: ${creationDate} (${ageInDays} days ago)"));
+        console.log(chalk.greenBright(`Account ${account.username}: Active days: ${activeDays}, Total commits: ${totalCommits}, Created: ${creationDate} (${ageInDays} days ago)`));
 
         // С вероятностью 15% ставим звездочку случайному репозиторию
         if (Math.random() < STAR_PROBABILITY) {
@@ -105,7 +105,7 @@ async function makeRandomCommit(account, login, repoName, fileName, commitMessag
         }
     }
     catch (error) {
-        console.error("Account ${account.username}: Failed to commit: ${error}");
+        console.error(`Account ${account.username}: Failed to commit: ${error}`);
     }
 }
         

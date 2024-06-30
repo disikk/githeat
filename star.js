@@ -5,11 +5,11 @@ const HttpsProxyAgent = require('https-proxy-agent');
 async function getRandomRepo() {
     const response = await axios.get('https://api.github.com/search/repositories', {
         params: {
-            q: 'stars:>100', // Репозитории с более чем 100 звездами
+            q: 'stars:>70', // Репозитории с более чем 100 звездами
             sort: 'stars',
             order: 'desc',
             per_page: 100,
-            page: Math.floor(Math.random() * 10) + 1 // Случайная страница от 1 до 10
+            page: Math.floor(Math.random() * 20) + 1 // Случайная страница от 1 до 20
         },
         headers: {
             'Accept': 'application/vnd.github.v3+json'
