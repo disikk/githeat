@@ -117,7 +117,7 @@ else
 fi
 
 # Создание алиасов для проверки логов и перезапуска сервиса
-BASH_PROFILE=$HOME/.bash_profile
+BASH_PROFILE=${HOME}/.bash_profile
 if ! grep -q "alias ${SERVICE_NAME}_logs" $BASH_ALIASES; then
     echo "alias ${SERVICE_NAME}_logs='sudo journalctl -u ${SERVICE_NAME} -fn 30 -o cat'" >> $BASH_ALIASES
 fi
