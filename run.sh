@@ -118,19 +118,19 @@ fi
 
 # Создание алиасов для проверки логов и перезапуска сервиса
 BASH_PROFILE="${HOME}/.bash_profile"
-if ! grep -q "alias ${SERVICE_NAME}_logs" $BASH_ALIASES; then
-    echo "alias ${SERVICE_NAME}_logs='sudo journalctl -u ${SERVICE_NAME} -fn 30 -o cat'" >> $BASH_ALIASES
+if ! grep -q "alias ${SERVICE_NAME}_logs" $BASH_PROFILE; then
+    echo "alias ${SERVICE_NAME}_logs='sudo journalctl -u ${SERVICE_NAME} -fn 30 -o cat'" >> $BASH_PROFILE
 fi
 
-if ! grep -q "alias ${SERVICE_NAME}_restart" $BASH_ALIASES; then
-    echo "alias ${SERVICE_NAME}_restart='sudo systemctl restart ${SERVICE_NAME} && sudo journalctl -u ${SERVICE_NAME} -fn 30 -o cat'" >> $BASH_ALIASES
+if ! grep -q "alias ${SERVICE_NAME}_restart" $BASH_PROFILE; then
+    echo "alias ${SERVICE_NAME}_restart='sudo systemctl restart ${SERVICE_NAME} && sudo journalctl -u ${SERVICE_NAME} -fn 30 -o cat'" >> $BASH_PROFILE
 fi
-if ! grep -q "alias ${SERVICE_NAME}_stop" $BASH_ALIASES; then
-    echo "alias ${SERVICE_NAME}_stop='sudo systemctl stop ${SERVICE_NAME}'" >> $BASH_ALIASES
+if ! grep -q "alias ${SERVICE_NAME}_stop" $BASH_PROFILE; then
+    echo "alias ${SERVICE_NAME}_stop='sudo systemctl stop ${SERVICE_NAME}'" >> $BASH_PROFILE
 fi
 
-# Перезагрузка bash_aliases, чтобы алиасы стали доступны
-source $BASH_ALIASES
+# Перезагрузка bash_PROFILE, чтобы алиасы стали доступны
+source $BASH_PROFILE
 
 echo "Вывод логов скрипта: ${SERVICE_NAME}_logs
 Запуск/рестарт скрипта: ${SERVICE_NAME}_restart
